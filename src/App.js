@@ -8,6 +8,7 @@ function App() {
   const [carModel, setCarModel] = useState('Tesla');
   const [isBlack, setIsBlack] = useState(false);
   const [serverResponse, setServerResponse] = useState('');
+  const [inputsEnabled, setInputsEnabled] = useState(true);
 
   const handleSubmit = async () => {
     const response = await fetch('http://127.0.0.1:8000/items/', {
@@ -27,14 +28,26 @@ function App() {
     setServerResponse(JSON.stringify(data, null, 2));
   };
 
+  const toggleInputs = () => {
+    setInputsEnabled(!inputsEnabled);
+  };
+
   return (
     <div className="container mt-5 ">
+
+      <label class="switch position-fixed top-0 end-0 m-4">
+        <input type="checkbox" />
+        <span class="slider" onClick={toggleInputs}></span>
+      </label>
+
       <div className="mx-auto" style={{ maxWidth: "600px" }}>
         <h1 className="mb-4">FastAPI and React Example</h1>
 
         <div className="mb-3">
           <label className="form-label">Name:</label>
-          <input type="text" className="form-control smaller-input" onChange={(e) => setItemName(e.target.value)} />
+          <input type="text" className="form-control smaller-input"
+            onChange={(e) => setItemName(e.target.value)}
+            disabled={!inputsEnabled} />
         </div>
 
         <div className="mb-3">
@@ -43,6 +56,7 @@ function App() {
             className="form-select smaller-input"
             value={carModel}
             onChange={(e) => setCarModel(e.target.value)}
+            disabled={!inputsEnabled}
           >
             <option value="Honda">Honda</option>
             <option value="Toyota">Toyota</option>
@@ -61,6 +75,7 @@ function App() {
               value="true"
               checked={isBlack === true}
               onChange={() => setIsBlack(true)}
+              disabled={!inputsEnabled}
             />
             <label className="form-check-label" htmlFor="colorWhite">
               Black
@@ -75,6 +90,7 @@ function App() {
               value="false"
               checked={isBlack === false}
               onChange={() => setIsBlack(false)}
+              disabled={!inputsEnabled}
             />
             <label className="form-check-label" htmlFor="colorBlack">
               White
@@ -88,10 +104,11 @@ function App() {
             className="form-control smaller-input"
             rows="3"
             onChange={(e) => setItemDescription(e.target.value)}
+            disabled={!inputsEnabled}
           ></textarea>
         </div>
 
-        <button className="btn btn-primary" onClick={handleSubmit}>
+        <button className="btn btn-primary" onClick={handleSubmit} disabled={!inputsEnabled}>
           Submit
         </button>
 
